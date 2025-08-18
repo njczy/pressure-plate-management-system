@@ -1,0 +1,97 @@
+.pressure-plate-modal .ant-modal-content {
+  padding: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pressure-plate-modal .ant-modal-header {
+  padding: 0;
+  margin: 0;
+  border-bottom: none;
+}
+
+.pressure-plate-modal .ant-modal-body {
+  padding: 0;
+}
+
+.pressure-plate-modal .ant-modal-close {
+  display: none;
+}
+
+.pressure-plate-modal .ant-select-selector {
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+
+.pressure-plate-modal .ant-select-focused .ant-select-selector {
+  border-color: #5a9f9f;
+  box-shadow: 0 0 0 2px rgba(90, 159, 159, 0.2);
+}
+
+.pressure-plate-modal .ant-btn-primary {
+  background-color: #5a9f9f;
+  border-color: #5a9f9f;
+}
+
+.pressure-plate-modal .ant-btn-primary:hover {
+  background-color: #4a8f8f;
+  border-color: #4a8f8f;
+}
+
+.pressure-plate-modal .window-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pressure-plate-modal .window-controls .ant-btn {
+  width: 24px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: white;
+}
+
+.pressure-plate-modal .window-controls .ant-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.pressure-plate-modal .config-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.pressure-plate-modal .config-label {
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 100px;
+}
+
+.pressure-plate-modal .config-separator {
+  margin: 0 4px;
+  font-size: 14px;
+  color: #666;
+}
+
+.pressure-plate-modal .config-result {
+  font-size: 14px;
+  color: #333;
+  margin-left: 4px;
+}
+
+.pressure-plate-modal .config-text {
+  font-size: 14px;
+  color: #333;
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  min-width: 80px;
+  text-align: center;
+}
