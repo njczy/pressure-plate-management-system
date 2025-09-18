@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>拟物压板（无底板，国网风格红黄灰）</title>
+<style>
+:root{
+  --slot-w: 92px;     /* 单位宽度（含标签） */
+  --plate-w: 16px;    /* 拨片更窄 */
+  --plate-h: 70px;
+  --bezel-w: 60px;    /* 新增：金属外框尺寸 */
+  --bezel-h: 110px;
+  --gap-x: 32px;
+  --gap-y: 24px;
+  --text: #333;
+}
+
+/* 容器：网格排布 */
+.board{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--slot-w), 1fr));
+  gap: var(--gap-y) var(--gap-x);
+  padding:24px;
+  background:#f5f7f9;
+  border:1px solid #cfd4da;
+  border-radius:12px;
+  max-width:1000px;
+  margin:24px auto;
+}
+
+/* 单个压板 */
+.yaban{
+  width: var(--slot-w);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  color:var(--text);
+}
+
+/* 新增：金属外框（底座外观，更接近参考图的米灰色） */
+.bezel{
+  position:relative;
+  width:var(--bezel-w); height:var(--bezel-h);
+  border-radius:8px;
+  background:linear-gradient(#e9e1d6,#d6ccbf);
+  border:1px solid #a99f90;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 3px 6px rgba(114,104,92,.2);
+}
+.screw{position:absolute;width:6px;height:6px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff 0 25%, #b6b0a6 26% 65%, #857d71 66% 100%);
+  box-shadow:0 0 0 1px #a69d8f
+}
+.screw.tl{left:6px;top:6px}
+.screw.br{right:6px;bottom:6px}
+
+/* 可选：两颗固定点（保留样式，当前未使用） */
+.pins{
+  position:relative;
+  width: var(--plate-w);
+  height: 8px;
+  margin-bottom:6px;
+}
+.pin{position:absolute; top:0; width:5px; height:5px; border-radius:50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 25%, #A9B2BC 26% 65%, #6E7A86 66% 100%);
+  box-shadow: 0 0 0 1px #8e98a3;
+  opacity:.85;
+}
+.pin.l{left:-3px} .pin.r{right:-3px}
+
+/* 拨片本体 */
+.plate{
+  position:absolute; left:50%; top:50%;
+  width:var(--plate-w); 
+  height:var(--plate-h);
+  border-radius:4px;
+  border:1px solid rgba(0,0,0,.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65),
+              inset 0 -1px 0 rgba(0,0,0,.12),
+              0 3px 6px rgba(0,0,0,.25);
+  transform-origin: 50% 50%;
+  transform: translate(-50%,-50%);
+}
+
+/* 状态：合=竖直；分=左倾（基于中心旋转，角度略减避免越界） */
+.yaban[data-state="on"]  .plate{ transform: translate(-50%,-50%) rotateZ(0deg) }
+.yaban[data-state="off"] .plate{ transform: translate(-50%,-50%) rotateZ(-18deg) }
+
+/* 颜色（加深的国网风格） */
+.yaban[data-color="red"]    .plate{ background:linear-gradient(#B71C1C, #D32F2F) }
+.yaban[data-color="yellow"] .plate{ background:linear-gradient(#F57F17, #F9A825) }
+.yaban[data-color="gray"]   .plate{ background:linear-gradient(#616161, #8E8E8E) }
+.yaban[data-color="black"]  .plate{ background:linear-gradient(#0a0a0a, #222222) }
+
+/* 标签 */
+.label{
+  margin-top:8px; width:100%; text-align:center;
+  font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* 可选：红色告警闪烁（保留，默认未开启） */
+@keyframes glow { 0%,100%{filter:none} 50%{filter: drop-shadow(0 0 8px rgba(183,28,28,.9))} }
+.yaban[data-alarm="true"][data-color="red"] .plate{ animation: glow 1.2s infinite }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <!-- 红色：竖直 -->
+  <div class="yaban" data-color="red" data-state="on">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">竖（红）</div>
+  </div>
+
+  <!-- 红色：左倾（斜） -->
+  <div class="yaban" data-color="red" data-state="off">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">斜（红）</div>
+  </div>
+
+  <!-- 黄色：竖直 -->
+  <div class="yaban" data-color="yellow" data-state="on">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">竖（黄）</div>
+  </div>
+
+  <!-- 黄色：左倾（斜） -->
+  <div class="yaban" data-color="yellow" data-state="off">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">斜（黄）</div>
+  </div>
+
+  <!-- 灰色：竖直 -->
+  <div class="yaban" data-color="gray" data-state="on">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">竖（灰）</div>
+  </div>
+
+  <!-- 灰色：左倾（斜） -->
+  <div class="yaban" data-color="gray" data-state="off">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">斜（灰）</div>
+  </div>
+
+  <!-- 黑色：竖直 -->
+  <div class="yaban" data-color="black" data-state="on">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">竖（黑）</div>
+  </div>
+
+  <!-- 黑色：左倾（斜） -->
+  <div class="yaban" data-color="black" data-state="off">
+    <div class="bezel">
+      <div class="screw tl"></div><div class="screw br"></div>
+      <div class="plate"></div>
+    </div>
+    <div class="label">斜（黑）</div>
+  </div>
+</div>
+
+</body>
+</html>

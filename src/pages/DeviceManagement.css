@@ -1,0 +1,303 @@
+/* 页面容器与头部 */
+.dm-page {
+  padding: 16px;
+  background: #f5f7f8;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.dm-header {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+/* 主体布局 */
+.dm-main {
+  flex: 1;
+  min-height: 0;
+}
+
+.dm-right {
+  background: #fff;
+  border-radius: 0; /* 全局直角 */
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* 右侧顶部筛选区 */
+.dm-filters {
+  padding: 12px 12px 0 12px;
+}
+
+.dm-filter-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* 让每个筛选项在两行布局中占两列，三项刚好一行 */
+.dm-filter-item.span-2 {
+  grid-column: span 2;
+}
+
+.dm-filter-item label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.dm-filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 12px 12px 12px;
+}
+
+/* 操作工具条（绿色浅背景） */
+.dm-toolbar {
+  background: #e6f3f2;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+}
+
+/* 启用开关使用项目绿色 */
+.dm-toolbar :where(.ant-switch-checked) {
+  background-color: #0f8a80 !important;
+}
+.dm-toolbar :where(.ant-switch-checked:hover) {
+  background-color: #0d7b72 !important;
+}
+
+/* 表格容器 */
+.dm-table {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 让表格主体占满空间，分页固定在底部 */
+.dm-table :where(.ant-table-wrapper) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.dm-table :where(.ant-table) {
+  flex: 1;
+  min-height: 0;
+}
+
+.dm-pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.dm-pagination :where(.ant-pagination) {
+  margin: 0;
+}
+
+/* 分页项基本样式 */
+.dm-pagination .ant-pagination-item {
+  border: 1px solid #d9d9d9 !important;
+  background: #fff !important;
+  line-height: 32px !important;
+  text-align: center !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  border-radius: 0 !important;
+}
+.dm-pagination .ant-pagination-item a {
+  color: #000 !important;
+  display: block !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+}
+
+/* 高亮页码样式与主色一致 */
+.dm-pagination .ant-pagination-item-active {
+  border-color: #0f8a80 !important;
+  background: #0f8a80 !important;
+}
+.dm-pagination .ant-pagination-item-active a {
+  color: #fff !important;
+}
+
+.dm-total,
+.dm-jump-text {
+  color: #333;
+}
+
+/* 页码输入与每页条数选择边框风格 */
+.dm-pagination :where(.ant-input-sm),
+.dm-pagination :where(.ant-select-selector) {
+  border-radius: 0 !important;
+}
+
+/* 表格文本裁剪 */
+.nowrap-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 顶部/中部/底部区域按高度百分比分配 */
+.dm-top {
+  /* 让顶部区域根据内容自适应高度，避免与列表重叠 */
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-center {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0;
+}
+
+/* 仅给表格和工具条之间增加安全间距，避免重叠 */
+.dm-right .dm-table { margin-top: 24px; }
+
+.dm-bottom {
+  height: 5vh;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 12px 12px 12px;
+}
+
+/* 统一配置管理页弹窗：去除四周留白，与绿色标题条对齐 */
+.dm-modal :where(.ant-modal-content) {
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+.dm-modal :where(.ant-modal-body) {
+  padding: 0 !important;
+}
+
+/* 让更新日志弹框强制覆盖整个右侧区域 */
+.logs-modal-fill :where(.ant-modal) {
+  transform: none !important;
+  margin: 0 !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+  height: 100vh !important;
+  top: 0 !important;
+  bottom: 0 !important;
+}
+.logs-modal-fill :where(.ant-modal-content) {
+  height: 100vh !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+.logs-modal-fill :where(.ant-modal-body) {
+  padding: 0 !important;
+  flex: 1 !important;
+  overflow: hidden !important;
+  height: calc(100vh - 48px) !important;
+}
+.logs-modal-fill :where(.ant-modal-header) {
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 8px 16px !important;
+  flex-shrink: 0 !important;
+  height: 48px !important;
+}
+.logs-modal-fill :where(.ant-modal-close) {
+  border-radius: 0 !important;
+}
+/* 确保弹框标题行与内容区域宽度一致 */
+.logs-modal-fill .dm-right {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* ===== 表格视觉风格（对齐示例图） ===== */
+/* 外边框与圆角 */
+.dm-table :where(.ant-table) {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important; /* 四角直角 */
+  overflow: hidden;
+  background: #fff;
+}
+
+/* 让列宽根据内容自适应，配合 scroll x 可横向滚动查看完整文本 */
+.dm-table :where(.ant-table table) {
+  table-layout: auto !important;
+}
+
+/* 确保任何容器层级都不带圆角 */
+.dm-table :where(.ant-table, .ant-table-container, .ant-table-wrapper) {
+  border-radius: 0 !important;
+}
+
+/* 消除表头首尾单元格可能的圆角 */
+.dm-table :where(.ant-table-thead) > tr > th:first-child {
+  border-top-left-radius: 0 !important;
+}
+.dm-table :where(.ant-table-thead) > tr > th:last-child {
+  border-top-right-radius: 0 !important;
+}
+
+/* 表头：浅灰底、加粗、居中 */
+.dm-table :where(.ant-table-thead) > tr > th {
+  background: #f3f4f6 !important;
+  color: #333 !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  border-color: #d9d9d9 !important;
+  padding: 12px 16px !important; /* 与tbody单元格保持一致的上下内边距 */
+  font-size: 14px !important;
+  white-space: nowrap !important; /* 表头不换行 */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 表体：行高更舒适、网格线颜色统一 */
+.dm-table :where(.ant-table-tbody) > tr > td {
+  border-color: #e5e7eb !important;
+  padding: 12px 16px !important; /* 与表头保持一致，行高一致 */
+  color: #333 !important;
+  font-size: 14px !important;
+  white-space: nowrap !important; /* 内容不换行，避免被挤成多行 */
+}
+
+/* 表头内部标题容器不换行（防止窄列自动折行） */
+.dm-table :where(.ant-table-thead) .ant-table-column-title {
+  white-space: nowrap !important;
+}
+
+/* 斑马纹行背景（与图例近似） */
+.dm-table :where(.ant-table-tbody) > tr:nth-child(even) td {
+  background: #f8f9fa !important;
+}
+
+/* 选择列更紧凑 */
+.dm-table :where(.ant-table-selection-column) {
+  width: 56px !important;
+}
+
+/* 去掉单元格内多余的默认阴影/背景，以便边线更清晰 */
+.dm-table :where(.ant-table-container) {
+  background: transparent !important;
+}

@@ -1,0 +1,117 @@
+/* HeaderBar standalone styles for plug-and-play reuse */
+
+.ml-header {
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.ml-header-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 80px;
+  padding: 0;
+}
+
+.ml-header-left {
+  display: flex;
+  align-items: center;
+  gap: 350px;
+}
+
+.ml-header-right {
+  position: absolute;
+  right: 10px;
+  top: -3px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.ml-brand {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ml-nav-items {
+  position: absolute;
+  right: 300px;
+  top: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.ml-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 80px;
+  padding: 0 16px;
+  min-width: 80px;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2f4a4c;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 1;
+}
+
+.ml-nav-item:hover {
+  background: rgba(212, 240, 238, 0.35);
+}
+
+.ml-nav-item.active {
+  color: #0d867f;
+}
+
+.ml-nav-icon svg,
+.ml-nav-icon img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.ml-nav-label {
+  white-space: nowrap;
+  color: inherit;
+}
+
+.ml-nav-badge {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  min-width: 20px;
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 10px;
+  background: #fa3131;
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(232, 78, 78, 0.3);
+}
+
+/* additional right area layout tweaks */
+.ml-header-right {
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  margin-left: 12px;
+}
+
+.ml-header-right > svg {
+  display: block;
+}

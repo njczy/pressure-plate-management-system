@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Modal, Select, Button, Space, Row, Col } from 'antd';
 import { MinusOutlined, ExpandOutlined, CloseOutlined } from '@ant-design/icons';
 import './PressurePlateTerminologyModal.css';
+import { getTerminologyConfig, setTerminologyConfig, TerminologyKey } from '../lib/terminologyConfig';
 
 const { Option } = Select;
 
@@ -14,6 +15,9 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
   visible,
   onClose
 }) => {
+  // 所有可选项
+  const allOptions = ['保护屏', '设备间隔', '压板名称'];
+
   const [hardPlateConfig, setHardPlateConfig] = useState({
     status: '',
     protectionScreen: '',
@@ -28,10 +32,48 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
     plateName: ''
   });
 
+  // 下拉框可选项：每个下拉都固定提供三项，不互斥
+  const hardPlateOptions = useMemo(() => ({
+    protectionScreen: allOptions,
+    deviceInterval: allOptions,
+    plateName: allOptions
+  }), []);
+
+  const softPlateOptions = useMemo(() => ({
+    protectionScreen: allOptions,
+    deviceInterval: allOptions,
+    plateName: allOptions
+  }), []);
+
+  // 初始化为已保存的配置
+  useEffect(() => {
+    if (visible) {
+      const cfg = getTerminologyConfig();
+      // 将数组顺序映射回三个框；保留原对象 status 字段
+      const getValues = (arr: TerminologyKey[]) => ({
+        protectionScreen: (arr[0] || '') as any,
+        deviceInterval: (arr[1] || '') as any,
+        plateName: (arr[2] || '') as any
+      });
+      setHardPlateConfig(prev => ({ ...prev, ...getValues(cfg.hard) }));
+      setSoftPlateConfig(prev => ({ ...prev, ...getValues(cfg.soft) }));
+    }
+  }, [visible]);
+
   const handleConfirm = () => {
-    // 处理确定逻辑
-    console.log('硬压板配置:', hardPlateConfig);
-    console.log('软压板配置:', softPlateConfig);
+    // 读取三个框的顺序，空值自动过滤
+    const hardOrder: TerminologyKey[] = [
+      hardPlateConfig.protectionScreen,
+      hardPlateConfig.deviceInterval,
+      hardPlateConfig.plateName
+    ].filter(Boolean) as TerminologyKey[];
+    const softOrder: TerminologyKey[] = [
+      softPlateConfig.protectionScreen,
+      softPlateConfig.deviceInterval,
+      softPlateConfig.plateName
+    ].filter(Boolean) as TerminologyKey[];
+
+    setTerminologyConfig({ hard: hardOrder, soft: softOrder });
     onClose();
   };
 
@@ -55,7 +97,7 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
       className="pressure-plate-modal"
     >
       <div style={{ 
-        backgroundColor: '#5a9f9f',
+        backgroundColor: '#0f8a80',
         color: 'white',
         padding: '8px 16px',
         display: 'flex',
@@ -96,10 +138,11 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
               size="small"
               value={hardPlateConfig.protectionScreen}
               onChange={(value) => setHardPlateConfig(prev => ({ ...prev, protectionScreen: value }))}
+              allowClear
             >
-              <Option value="保护屏">保护屏</Option>
-              <Option value="设备间隔">设备间隔</Option>
-              <Option value="压板名称">压板名称</Option>
+              {hardPlateOptions.protectionScreen.map(option => (
+                <Option key={option} value={option}>{option}</Option>
+              ))}
             </Select>
             <span className="config-separator">+</span>
             <Select
@@ -108,10 +151,11 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
               size="small"
               value={hardPlateConfig.deviceInterval}
               onChange={(value) => setHardPlateConfig(prev => ({ ...prev, deviceInterval: value }))}
+              allowClear
             >
-              <Option value="保护屏">保护屏</Option>
-              <Option value="设备间隔">设备间隔</Option>
-              <Option value="压板名称">压板名称</Option>
+              {hardPlateOptions.deviceInterval.map(option => (
+                <Option key={option} value={option}>{option}</Option>
+              ))}
             </Select>
             <span className="config-separator">+</span>
             <Select
@@ -120,10 +164,11 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
               size="small"
               value={hardPlateConfig.plateName}
               onChange={(value) => setHardPlateConfig(prev => ({ ...prev, plateName: value }))}
+              allowClear
             >
-              <Option value="保护屏">保护屏</Option>
-              <Option value="设备间隔">设备间隔</Option>
-              <Option value="压板名称">压板名称</Option>
+              {hardPlateOptions.plateName.map(option => (
+                <Option key={option} value={option}>{option}</Option>
+              ))}
             </Select>
             <span className="config-separator">+</span>
             <span className="config-result">压板</span>
@@ -142,10 +187,11 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
               size="small"
               value={softPlateConfig.protectionScreen}
               onChange={(value) => setSoftPlateConfig(prev => ({ ...prev, protectionScreen: value }))}
+              allowClear
             >
-              <Option value="保护屏">保护屏</Option>
-              <Option value="设备间隔">设备间隔</Option>
-              <Option value="压板名称">压板名称</Option>
+              {softPlateOptions.protectionScreen.map(option => (
+                <Option key={option} value={option}>{option}</Option>
+              ))}
             </Select>
             <span className="config-separator">+</span>
             <Select
@@ -154,10 +200,11 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
               size="small"
               value={softPlateConfig.deviceInterval}
               onChange={(value) => setSoftPlateConfig(prev => ({ ...prev, deviceInterval: value }))}
+              allowClear
             >
-              <Option value="保护屏">保护屏</Option>
-              <Option value="设备间隔">设备间隔</Option>
-              <Option value="压板名称">压板名称</Option>
+              {softPlateOptions.deviceInterval.map(option => (
+                <Option key={option} value={option}>{option}</Option>
+              ))}
             </Select>
             <span className="config-separator">+</span>
             <Select
@@ -166,10 +213,11 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
               size="small"
               value={softPlateConfig.plateName}
               onChange={(value) => setSoftPlateConfig(prev => ({ ...prev, plateName: value }))}
+              allowClear
             >
-              <Option value="保护屏">保护屏</Option>
-              <Option value="设备间隔">设备间隔</Option>
-              <Option value="压板名称">压板名称</Option>
+              {softPlateOptions.plateName.map(option => (
+                <Option key={option} value={option}>{option}</Option>
+              ))}
             </Select>
             <span className="config-separator">+</span>
             <span className="config-result">软压板</span>
@@ -182,7 +230,7 @@ const PressurePlateTerminologyModal: React.FC<PressurePlateTerminologyModalProps
             <Button onClick={handleCancel}>取消</Button>
             <Button 
               type="primary" 
-              style={{ backgroundColor: '#5a9f9f', borderColor: '#5a9f9f' }}
+              style={{ backgroundColor: '#0f8a80', borderColor: '#0f8a80' }}
               onClick={handleConfirm}
             >
               确定

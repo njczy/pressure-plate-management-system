@@ -12,8 +12,8 @@ import {
   InputNumber
 } from 'antd';
 import { ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons';
-import { useNavigate, useParams } from 'react-router-dom';
-import { supabase, Device } from '../lib/supabase';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { localDataService, Device } from '../lib/localData';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -26,17 +26,15 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const stateDevice = (location.state as any)?.device as Device | undefined;
   const isEdit = !!id;
 
   // 获取设备详情
   const fetchDeviceDetail = async (deviceId: string) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('devices')
-        .select('*')
-        .eq('id', deviceId)
-        .single();
+      const { data, error } = await localDataService.getDeviceById(parseInt(deviceId));
       
       if (error) {
         message.error('获取设备详情失败: ' + error.message);
@@ -52,10 +50,14 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
   };
 
   useEffect(() => {
+    // 先用路由状态中的设备数据预填，确保与列表一致
+    if (stateDevice) {
+      form.setFieldsValue(stateDevice);
+    }
     if (isEdit && id) {
       fetchDeviceDetail(id);
     }
-  }, [id, isEdit]);
+  }, [id, isEdit, stateDevice]);
 
   // 提交表单
   const handleSubmit = async (values: any) => {
@@ -63,13 +65,10 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
     try {
       if (isEdit) {
         // 更新设备
-        const { error } = await supabase
-          .from('devices')
-          .update({
-            ...values,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', id);
+        const { error } = await localDataService.updateDevice(parseInt(id!), {
+          ...values,
+          updated_at: new Date().toISOString()
+        });
         
         if (error) {
           message.error('更新设备失败: ' + error.message);
@@ -79,9 +78,14 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
         message.success('更新设备成功');
       } else {
         // 新增设备
-        const { error } = await supabase
-          .from('devices')
-          .insert([values]);
+        const deviceData = {
+          ...values,
+          pressure_plate_status: '投入',
+          last_changed_by: '',
+          last_changed_at: new Date().toISOString(),
+          change_remarks: ''
+        };
+        const { error } = await localDataService.createDevice(deviceData);
         
         if (error) {
           message.error('新增设备失败: ' + error.message);
@@ -121,8 +125,9 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
           layout="vertical"
           onFinish={handleSubmit}
           initialValues={{
-            type: 'soft',
-            pressure_plate_box: 'XXXX'
+            type: 'hard',
+            pressure_plate_box: 'XXXX',
+            pressure_plate_time: '投入、退出'
           }}
         >
           <Row gutter={[24, 16]}>
@@ -191,8 +196,8 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
                 rules={[{ required: true, message: '请选择类型' }]}
               >
                 <Select placeholder="请选择类型">
-                  <Option value="soft">软</Option>
-                  <Option value="hard">硬</Option>
+                  <Option value="soft">软压板</Option>
+                  <Option value="hard">硬压板</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -213,7 +218,7 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
                 name="pressure_plate_time"
                 rules={[{ required: true, message: '请输入压板动词' }]}
               >
-                <Input placeholder="请输入压板动词（如：投入、调出）" />
+                <Input placeholder="请输入压板动词（如：投入、退出）" />
               </Form.Item>
             </Col>
           </Row>
@@ -232,15 +237,15 @@ const DeviceDetail: React.FC<DeviceDetailProps> = () => {
 
           <Row gutter={[24, 16]}>
             <Col span={12}>
-              <Form.Item
-                label="压板类型颜色"
+              <Form.Item 
+                label="压板颜色"
                 name="pressure_plate_type_color"
-                rules={[{ required: true, message: '请选择压板类型颜色' }]}
+                rules={[{ required: true, message: '请选择压板颜色' }]}
               >
-                <Select placeholder="请选择压板类型颜色">
-                  <Option value="outlet">出口</Option>
-                  <Option value="pressure_plate">压板</Option>
-                  <Option value="backup">备用</Option>
+                <Select placeholder="请选择压板颜色">
+                  <Option value="red">红</Option>
+                  <Option value="yellow">黄</Option>
+                  <Option value="gray">黑</Option>
                 </Select>
               </Form.Item>
             </Col>

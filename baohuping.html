@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>变电站保护屏柜 (3x3 布局修正版)</title>
+<style>
+  /* --- 柜体基础样式 --- */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f2f5;
+    font-family: 'Microsoft YaHei', sans-serif;
+  }
+
+  .cabinet-frame {
+    width: 240px; /* 柜子宽度调整为75%：320px × 0.75 = 240px */
+    height: 480px; /* 恢复原来的高度 */
+    background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+    border: 3px solid #8d9499;
+    border-radius: 8px; /* 减小圆角更工业化 */
+    box-shadow: 
+      0 15px 30px rgba(0, 0, 0, 0.2),
+      inset 0 3px 6px rgba(255, 255, 255, 0.8),
+      inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    padding: 12px;
+    box-sizing: border-box;
+    position: relative;
+  }
+  
+  /* 添加柜体顶部标识区域 */
+  .cabinet-frame::before {
+    content: '变电站保护屏柜';
+    position: absolute;
+    top: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(#e9ecef, #dee2e6);
+    border: 2px solid #8d9499;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #495057;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .cabinet-door {
+    width: 100%; height: 100%;
+    background: rgba(35, 45, 55, 0.8);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      inset 0 2px 4px rgba(0, 0, 0, 0.3),
+      inset 0 0 12px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
+    padding: 10px 15px 10px 5px; /* 左侧内边距减少到5px */
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+  /* 添加门板左下角状态指示灯 */
+  .cabinet-door::after {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(#00ff00, #00cc00);
+    border-radius: 50%;
+    border: 1px solid #009900;
+    box-shadow: 0 0 6px rgba(0, 255, 0, 0.6);
+  }
+
+  .handle {
+    position: absolute; 
+    right: 8px; /* 向右移动5px: 13px - 5px = 8px */
+    top: calc(50% + 0px); /* 向上调整10px */
+    transform: translateY(-50%);
+    width: 28px; height: 28px;
+    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f8f9fa 30%, #e9ecef 70%, #dee2e6 100%);
+    border-radius: 50%; 
+    border: 2px solid #adb5bd;
+    box-shadow: 
+      0 3px 8px rgba(0,0,0,0.25),
+      inset 0 1px 2px rgba(255,255,255,0.8),
+      inset 0 -1px 2px rgba(0,0,0,0.1);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 10;
+  }
+  .handle::after { 
+    content: ''; 
+    width: 4px; height: 10px; 
+    background: linear-gradient(#6c757d, #495057); 
+    border-radius: 2px; 
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.3);
+  }
+
+
+  
+  .divider {
+    height: 4px; /* 减小分隔条高度 */
+    width: 95%;
+    margin: 4px auto; /* 减小上下边距防止与内容重叠 */
+    background: linear-gradient(#c0c5cb, #a1aab4);
+    border: 1px solid #717d8a;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+    flex-shrink: 0; /* 防止被压缩 */
+  }
+  
+  .cabinet-layer {
+    flex: 1;
+    display: flex; justify-content: center; align-items: center;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden; /* 确保层内容不超出 */
+    padding: 2px 0; /* 增加小量垂直内边距防止与分隔条重叠 */
+  }
+
+  /* --- 核心修正：重新计算压板尺寸以适应3列布局 --- */
+  :root{
+    /* 压板尺寸微调以适应窄柜 */
+    --slot-w: 45px;     /* 单元宽度缩小以适应窄柜 */
+    --plate-w: 13px;    /* 拨片宽度适当缩小但仍能覆盖螺丝 */
+    --plate-h: 36px;    /* 拨片高度适当缩小但仍能覆盖螺丝 */
+    --bezel-w: 32px;    /* 底座宽度缩小以适应窄柜 */
+    --bezel-h: 40px;    /* 底座高度适当缩小 */
+    
+    --gap-y: 4px;       /* 减小垂直间隙 */
+    --text: #c8d1da;
+  }
+
+  .indicator-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr); /* 改为4列布局 */
+    grid-template-rows: repeat(4, auto); /* 改为4行 */
+    row-gap: 50px; /* 行间距保持50px */
+    column-gap: 6px; /* 增加列间距：4px → 6px */
+    width: 100%;
+    height: auto; /* 改为auto */
+    align-content: center; /* 整体居中对齐 */
+    justify-items: start; /* 改为左对齐 */
+    padding: 0; /* 移除网格内边距 */
+    box-sizing: border-box;
+    overflow: visible; /* 允许内容完全显示 */
+  }
+
+  .yaban{
+    width: var(--slot-w);
+    display:flex; flex-direction:column; align-items:center;
+    color:var(--text);
+    margin: 0; /* 移除负边距，让行间距生效 */
+  }
+
+  .bezel{
+    position:relative;
+    width:var(--bezel-w); height:var(--bezel-h);
+    border-radius:6px;
+    background:linear-gradient(135deg, #f2ede4 0%, #e9e1d6 30%, #d6ccbf 70%, #c8beb1 100%);
+    border:2px solid #a99f90;
+    box-shadow: 
+      inset 0 2px 4px rgba(255,255,255,0.9), 
+      inset 0 -1px 2px rgba(0,0,0,0.1),
+      0 3px 6px rgba(114,104,92,0.3),
+      0 1px 2px rgba(114,104,92,0.1);
+  }
+
+  .screw{position:absolute;width:6px;height:6px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #ffffff 0%, #e9ecef 20%, #b6b0a6 40%, #857d71 80%, #6c6258 100%);
+    border: 1px solid #857d71;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.3),
+      inset 0 1px 1px rgba(255,255,255,0.4);
+  }
+  .screw.tl{left:6px;top:6px} .screw.br{right:6px;bottom:6px}
+
+  .plate{
+    position:absolute; left:50%; top:50%;
+    width:var(--plate-w); height:var(--plate-h);
+    border-radius:3px; border:1px solid rgba(0,0,0,.28);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 -1px 0 rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.25);
+    transform-origin: 50% 50%; transform: translate(-50%,-50%);
+  }
+  .yaban[data-state="on"] .plate{ transform: translate(-50%,-50%) rotateZ(0deg) }
+  .yaban[data-state="off"] .plate{ transform: translate(-50%,-50%) rotateZ(-25deg) /* 增大倾斜角度，更好覆盖螺丝 */ }
+  .yaban[data-color="red"] .plate{ background:linear-gradient(#B71C1C, #D32F2F) }
+  .yaban[data-color="yellow"] .plate{ background:linear-gradient(#F57F17, #F9A825) }
+  .yaban[data-color="gray"] .plate{ background:linear-gradient(#616161, #8E8E8E) }
+  .yaban[data-color="black"] .plate{ background:linear-gradient(#212121, #424242) }
+
+  .label{
+    margin-top:2px; width:100%; text-align:center;
+    font-size:9px; /* 字体调整为1.25倍：7px × 1.25 ≈ 9px */
+    font-weight: 500;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    line-height: 1.1;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+  }
+</style>
+</head>
+<body>
+
+<div class="cabinet-frame">
+  <div class="cabinet-door">
+    <div class="handle"></div>
+    
+      <div class="indicator-grid">
+        <!-- 第1行：红色4个 -->
+        <div class="yaban" data-color="red" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="red" data-state="off"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="red" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="red" data-state="off"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        
+        <!-- 第2行：最后3个红色插入到第一个黄色前面，黄色顺延 -->
+        <div class="yaban" data-color="red" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="red" data-state="off"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="red" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="yellow" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        
+        <!-- 第3行：黄色继续顺延 -->
+        <div class="yaban" data-color="yellow" data-state="off"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="yellow" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="yellow" data-state="off"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="yellow" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        
+        <!-- 第4行：灰色、黑色顺延 -->
+        <div class="yaban" data-color="gray" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="gray" data-state="off"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="black" data-state="on"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+        <div class="yaban" data-color="black" data-state="off"><div class="bezel"><div class="screw tl"></div><div class="screw br"></div><div class="plate"></div></div></div>
+      </div>
+
+  </div>
+</div>
+
+</body>
+</html>

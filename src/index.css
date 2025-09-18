@@ -12,3 +12,45 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Global square corners override for Ant Design components */
+:where(
+  .ant-btn,
+  .ant-input,
+  .ant-input-number,
+  .ant-input-affix-wrapper,
+  .ant-select-selector,
+  .ant-select-dropdown,
+  .ant-select-item,
+  .ant-table,
+  .ant-table-container,
+  .ant-pagination-item,
+  .ant-modal-content,
+  .ant-card,
+  .ant-segmented,
+  .ant-picker,
+  .ant-tag,
+  .ant-dropdown-menu,
+  .ant-popover-inner,
+  .ant-tooltip-inner,
+  .ant-message-notice-content,
+  .ant-notification-notice
+) {
+  border-radius: 0 !important;
+}
+
+/* For inputs and selects in focus/hover states to keep straight edges */
+:where(.ant-input:focus, .ant-input:hover,
+       .ant-input-affix-wrapper:focus, .ant-input-affix-wrapper:hover,
+       .ant-select-focused .ant-select-selector,
+       .ant-select-selector:hover) {
+  border-radius: 0 !important;
+}
+
+/* Ensure InputNumber handlers and group addons keep square corners */
+:where(.ant-input-number, .ant-input-number-group-addon,
+       .ant-input-number-handler-wrap,
+       .ant-input-number-handler, 
+       .ant-input-number-group-wrapper) {
+  border-radius: 0 !important;
+}

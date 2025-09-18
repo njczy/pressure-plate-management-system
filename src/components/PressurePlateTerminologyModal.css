@@ -1,6 +1,13 @@
 .pressure-plate-modal .ant-modal-content {
   padding: 0;
-  border-radius: 4px;
+  border-radius: 0; /* 直角 */
+  overflow: hidden;
+}
+
+/* 压板调整弹窗：去除内容内边距，使绿条标题与内容宽度一致 */
+.pressure-plate-adjust-modal .ant-modal-content {
+  padding: 0 !important;
+  border-radius: 0 !important;
   overflow: hidden;
 }
 
@@ -20,22 +27,22 @@
 
 .pressure-plate-modal .ant-select-selector {
   border: 1px solid #d9d9d9;
-  border-radius: 2px;
+  border-radius: 0;
 }
 
 .pressure-plate-modal .ant-select-focused .ant-select-selector {
-  border-color: #5a9f9f;
-  box-shadow: 0 0 0 2px rgba(90, 159, 159, 0.2);
+  border-color: #0f8a80;
+  box-shadow: 0 0 0 2px rgba(15, 138, 128, 0.2);
 }
 
 .pressure-plate-modal .ant-btn-primary {
-  background-color: #5a9f9f;
-  border-color: #5a9f9f;
+  background-color: #0f8a80;
+  border-color: #0f8a80;
 }
 
 .pressure-plate-modal .ant-btn-primary:hover {
-  background-color: #4a8f8f;
-  border-color: #4a8f8f;
+  background-color: #0d7b72;
+  border-color: #0d7b72;
 }
 
 .pressure-plate-modal .window-controls {
@@ -91,7 +98,7 @@
   padding: 4px 8px;
   background-color: #f0f0f0;
   border: 1px solid #d9d9d9;
-  border-radius: 2px;
+  border-radius: 0;
   min-width: 80px;
   text-align: center;
 }

@@ -18,7 +18,7 @@ import {
   ArrowLeftOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { supabase, Device } from '../lib/supabase';
+import { localDataService, Device } from '../lib/localData';
 import type { UploadProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 
@@ -60,9 +60,9 @@ const DataImport: React.FC = () => {
               protection_screen: '测试保护屏',
               device_issue: '测试设备问题',
               pressure_plate_name: '测试压板名称',
-              type: 'soft',
+              type: 'hard',
               pressure_plate_box: 'XXXX',
-              pressure_plate_time: '投入、调出'
+              pressure_plate_time: '投入、退出'
             }
           ];
           resolve(mockData);
@@ -108,18 +108,26 @@ const DataImport: React.FC = () => {
     for (let i = 0; i < importData.length; i++) {
       const item = importData[i];
       try {
-        const { error } = await supabase
-          .from('devices')
-          .insert([{
-            sequence: item.sequence,
-            power_station: item.power_station,
-            protection_screen: item.protection_screen,
-            device_issue: item.device_issue,
-            pressure_plate_name: item.pressure_plate_name,
-            type: item.type as 'soft' | 'hard',
-            pressure_plate_box: item.pressure_plate_box,
-            pressure_plate_time: item.pressure_plate_time
-          }]);
+        const { error } = await localDataService.createDevice({
+          sequence: item.sequence,
+          power_station: item.power_station,
+          protection_screen: item.protection_screen,
+          device_issue: item.device_issue,
+          pressure_plate_name: item.pressure_plate_name,
+          pressure_plate_general_name: item.pressure_plate_name,
+          // 统一为硬压板
+          type: 'hard',
+          pressure_plate_box: item.pressure_plate_box,
+          pressure_plate_time: item.pressure_plate_time,
+          pressure_plate_status: '投入',
+          pressure_plate_position: 'middle',
+          pressure_plate_position_x: 1,
+          pressure_plate_position_y: 1,
+          pressure_plate_type_color: 'red',
+          last_changed_by: '',
+          last_changed_at: new Date().toISOString(),
+          change_remarks: ''
+        });
         
         if (error) {
           results.push({ ...item, status: 'error', error: error.message });
@@ -151,7 +159,7 @@ const DataImport: React.FC = () => {
     // 创建模板数据
     const templateData = [
       ['序号', '所属电站', '保护屏', '设备问题', '压板名称', '类型', '压板术语', '压板动词'],
-      [1, '溪洛渡变', '示例保护屏', '示例设备问题', '示例压板名称', 'soft', 'XXXX', '投入、调出']
+      [1, '溪洛渡变', '示例保护屏', '示例设备问题', '示例压板名称', 'hard', 'XXXX', '投入、退出']
     ];
     
     // 创建CSV内容
@@ -212,7 +220,7 @@ const DataImport: React.FC = () => {
       width: 80,
       render: (type: string) => (
         <span style={{ color: type === 'soft' ? '#52c41a' : '#1890ff' }}>
-          {type === 'soft' ? '软' : '硬'}
+          {type === 'soft' ? '软压板' : '硬压板'}
         </span>
       )
     },
