@@ -20,7 +20,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <>
       <HeaderBar />
       <Layout className="ml-root">
-        <Sider width="10%" className="ml-sider" theme="light" collapsible={false} trigger={null}>
+        <Sider width={280} className="ml-sider" theme="light" collapsible={false} trigger={null}>
           <div className="ml-tabs">
             <Tabs
               defaultActiveKey="default"

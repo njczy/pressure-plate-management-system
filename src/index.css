@@ -54,3 +54,10 @@
        .ant-input-number-group-wrapper) {
   border-radius: 0 !important;
 }
+
+/* Global spacing variables */
+:root {
+  --space-4: 4px;
+  --space-10: 10px;
+  --space-30: 30px;
+}

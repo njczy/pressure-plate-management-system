@@ -369,11 +369,10 @@ const DeviceManagement: React.FC<DeviceManagementProps> = () => {
 
   return (
     <div className="dm-page">
-      <div className="dm-header">保护压板配置管理</div>
-
       <div className="dm-main">
         {/* 右侧筛选 + 工具条 + 表格 */}
         <div className="dm-right">
+          <div className="dm-header">保护压板配置管理</div>
           {/* 顶部区域（15% 高度）：筛选 + 操作条 */}
           <div className="dm-top">
             {/* 筛选区：一行四项 */}

@@ -1,18 +1,24 @@
 /* 页面容器与头部 */
 .dm-page {
-  padding: 16px;
+  padding: 0; /* 去除外部留白，扩大右侧白色区域 */
   background: #f5f7f8;
   height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  /* 与上部导航、左侧导航保持 10px 间距 */
+  /* 移除外边距，由全局 .ml-content 统一提供 10px 间距 */
+  /* margin-top: 10px; */
+  /* margin-left: 10px; */
 }
 
 .dm-header {
   font-size: 18px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 12px;
+  /* 与 .dm-right 内部内容保持左右 12px 对齐 */
+  padding: 12px 12px 0 12px;
+  margin-bottom: 8px;
 }
 
 /* 主体布局 */
@@ -94,16 +100,18 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  margin-bottom: 0 !important; /* 去掉默认底部间距，缩短与分页的距离 */
 }
-.dm-table :where(.ant-table) {
-  flex: 1;
-  min-height: 0;
+.dm-table .ant-table-wrapper,
+.dm-table .ant-table {
+  margin-bottom: 0 !important;
 }
 
 .dm-pagination {
   display: flex;
   justify-content: flex-end;
-  margin-top: 8px;
+  margin-top: var(--space-4); /* 与表格保持紧凑 */
+  margin-bottom: var(--space-30); /* 距离白色区域底部 30px */
 }
 
 .dm-pagination :where(.ant-pagination) {
@@ -179,7 +187,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 12px 12px 12px;
+  padding: 0 12px 0 12px; /* 去掉底部12px，避免与 .dm-pagination 的 30px 叠加 */
 }
 
 /* 统一配置管理页弹窗：去除四周留白，与绿色标题条对齐 */
